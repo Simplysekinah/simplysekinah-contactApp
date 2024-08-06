@@ -1,0 +1,169 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.profile{
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+}
+.landing,.recent,.keypad,.contact,.voicemail, .save{
+  max-width: 390px;
+  margin: auto;
+  height: 100vh;
+  background-color: black;
+}
+.left{
+  width: 100%;
+  height: 100vh;
+}
+.iphone{
+  font-size: 35px;
+}
+.iphone-hold{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hold{
+  max-width: 390px;
+  color: darkgrey;
+  background-color: aquamarine;
+  /* text-align: center; */
+}
+.iphone-p{
+  font-size: 12px;
+}
+.fav-p{
+  color: darkgrey;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  /* margin: auto; */
+}
+.Link{
+  color: darkgrey;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.up{
+  width: 120px;
+  height: 30px;
+  border-radius: 5px;
+  padding: 5px;
+}
+.all,.missed{
+  width: 60px;
+  /* background-color: rebeccapurple; */
+  display: flex;
+  align-items: center;
+  /* justify-content: ; */
+}
+hr{
+  background-color: white;
+  height: 2px;
+}
+.display{
+  height: 60px;
+  background-color: aqua;
+  width: 75%;
+  margin: auto;
+  outline: none;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.touch{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 0;
+}
+.call{
+  color: white;
+}
+.touchs{
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  border: 0;
+  background-color: green;
+}
+.holder-key{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.dell{
+  color: white;
+  font-size: 30px;
+}
+.create{
+  background-color: rgb(25, 24, 24);
+  border-radius: 5px;
+  padding: 3px;
+  width: 230px;
+  height: 60px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  position: absolute;
+  left: 670px;
+  /* top: 70px; */
+}
+.line{
+  border: 0.3px solid darkgray;
+  width: 230px;
+}
+.new{
+  position: relative;
+}
+.hold-p{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.defalt{
+  width: 230px;
+  height: 230px;
+  color: darkgray;
+}
+.add{
+  background-color: rgba(49, 48, 48, 0.537);
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+}
+.numbers{
+  width: 280px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+}
+.detail-con{
+  background-color: rgba(128, 128, 128, 0.253);
+  margin-top: 20px;
+  padding-left: 5px;
+}
+.first{
+  width: 100%;
+  border: 0;
+  outline: none;
+  height: 30px;
+  background-color: transparent;
+  color: white;
+}
