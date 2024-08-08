@@ -7,6 +7,7 @@ import Recent from './Components/Recent'
 import Voicemail from './Components/Voicemail'
 import Contacts from './Components/Contacts'
 import Save from './Components/Save'
+import ContactsList from './Components/ContactsList'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/voice' element={<Voicemail/>}/>
         </Route>
         <Route path='/save' element={<Save/>} />
+        <Route path='/numberPage' element={<ContactsList/>} />
       </Routes>
     </>
   )

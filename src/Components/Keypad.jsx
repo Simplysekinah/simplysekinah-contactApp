@@ -7,12 +7,13 @@ import { MdPersonAdd } from "react-icons/md";
 import AppContext from '../Constant/AppProvider';
 
 const Keypad = () => {
-  const { setPhoneNumber } = useContext(AppContext)
+  const { addContact,setcontacts } = useContext(AppContext)
   const [data, setdata] = useState({ number: "" })
   const [show, setshow] = useState(false)
   const [create, setcreate] = useState(false)
   const navigate = useNavigate()
   // const [store, setstore] = useState("")
+  // const storage =store
   const ser = () => {
     if (!data == "") {
       setshow(true)
@@ -28,15 +29,25 @@ const Keypad = () => {
       const newdata = { ...data }
       newdata.number = newdata.number.slice(0, -1)
       setdata(newdata)
+      // setdata({...data, number: data.number.slice(0,-1)})
     }
   }
   const add = () => {
     setcreate(!create)
-    setPhoneNumber(data.number)
+    // setcontacts(data.number)
     // console.log(store)
   }
   const contact = () => {
-    navigate("/save")
+    if (data.number) {
+      console.log(data.number);
+      
+      setcontacts(data.number)
+      // addContact({ number: data.number });
+      setdata({ number: "" });
+      setcreate(false);
+      setshow(false);
+      navigate("/save")
+    }
   }
   return (
     <>

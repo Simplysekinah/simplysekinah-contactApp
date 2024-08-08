@@ -2,14 +2,30 @@ import React, { useState, useContext } from 'react';
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { IoMdRemoveCircle } from "react-icons/io";
 import AppContext from '../Constant/AppProvider';
+import { useNavigate } from 'react-router-dom';
+// import {storage} from './Keypad'
 
 const Save = () => {
-  const { phoneNumber } = useContext(AppContext);
-  console.log(phoneNumber);
+  const { contacts, addContact } = useContext(AppContext);
+  const navigate = useNavigate()
+  // const phonenumber =storage
+  // console.log(phoneNumber);
 
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState(true);
+  const [contact, setContact] = useState({ firstName: "", lastName: "", company: "",contacts });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setContact({ ...contact, [name]: value });
+  };
+
   const add = () => {
     setMobile(!mobile);
+  };
+
+  const saveContact = () => {
+    addContact(contact);
+    navigate("/numberPage")
   };
 
   return (
@@ -18,18 +34,18 @@ const Save = () => {
         <div className='d-flex justify-content-around align-items-center position-sticky top-0 p-3'>
           <div className='text-primary'>Cancel</div>
           <div className='text-white'>New Contact</div>
-          <div className='text-primary'>Done</div>
+          <div className='text-primary' onClick={saveContact}>Done</div>
         </div>
         <div className='hold-p'>
           <IoPersonCircleSharp className='defalt' />
           <div className='add'>Add Photo</div>
         </div>
         <div className='detail-con'>
-          <input type="text" placeholder='First name' className='first' />
+          <input type="text" placeholder='First name' className='first' onChange={handleInputChange} />
           <hr />
-          <input type="text" placeholder='Last name' className='first' />
+          <input type="text" placeholder='Last name' className='first' onChange={handleInputChange} />
           <hr />
-          <input type="text" placeholder='Company' className='first' />
+          <input type="text" placeholder='Company' className='first' onChange={handleInputChange} />
         </div>
         <div className='detail-con'>
           {
@@ -37,7 +53,7 @@ const Save = () => {
               <div className='d-flex gap-4'>
                 <IoMdRemoveCircle className='bg-danger' />
                 <div className='text-primary'>Mobile</div>
-                <div className='text-dark'>{phoneNumber}</div>
+                <div className='text-light'>{contacts}</div>
               </div>
             )
           }
