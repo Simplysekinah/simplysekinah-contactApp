@@ -1,25 +1,64 @@
-import React, { useContext } from 'react';
+import React, { useContext,useState,useEffect } from 'react';
 import AppContext from '../Constant/AppProvider';
+import { auth,database } from '../Constant/FirebaseConfig';
+import { MdAddCall } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 const ContactsList = () => {
-  const { phoneNumber } = useContext(AppContext);
+  const navigate = useNavigate()
+  const Save = ()=>{
+      navigate('/dash/keypad')
+  }
+  const [contactDetails, setcontactDetails] = useState([])
+  const auth = getAuth()
+  try {
+    
+    onAuthStateChanged (auth,async(user)=>{
+      if(user){
+        const uid = user.uid;
+        // console.log(uid);
+        const userRef = doc(database, 'Users', uid)
+        // console.log(userRef);
+        const userDoc = (await getDoc(userRef))
+        // console.log(userDoc)
+        const userNumbers =userDoc.data()
+        // console.log(userNumbers);
+          
+          const phoneNumbers = userNumbers.contact
+          // console.log(phoneNumbers);
+          setcontactDetails(phoneNumbers)
+          // console.log(contactDetails);
+          
+      }else{
+        navigate('/')
+      }
+    })
+  } catch (error) {
+    
+  }
+  
 
   return (
     <div className="contacts-list">
       <h2>Saved Contacts</h2>
-      {phoneNumber.length > 0 ? (
+      {contactDetails.length > 0 ? (
         <ul>
-          {phoneNumber.map((contact, index) => (
+          {contactDetails.map((contact, index) => (
             <li key={index}>
               <div><strong>Name:</strong> {contact.firstName} {contact.lastName}</div>
               <div><strong>Company:</strong> {contact.company}</div>
-              <div><strong>Phone:</strong> {contact.contacts}</div>
+              <div><strong>Phone:</strong> {contact.phonenumber}</div>
             </li>
           ))}
         </ul>
       ) : (
         <p>No contacts saved yet.</p>
       )}
+      <button className=' bg-gray-400 rounded-full p-4 text-white fixed right-10 bottom-4' onClick={Save}>
+        <MdAddCall size={40} />
+      </button>
     </div>
   );
 };

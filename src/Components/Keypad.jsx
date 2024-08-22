@@ -1,19 +1,18 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { IoCall } from "react-icons/io5";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { IoMdContact } from "react-icons/io";
 import { MdPersonAdd } from "react-icons/md";
-import AppContext from '../Constant/AppProvider';
+import { useDispatch } from 'react-redux';
+import { setPhoneNumber } from '../Redux/PhoneSlice';
 
 const Keypad = () => {
-  const { addContact,setcontacts } = useContext(AppContext)
   const [data, setdata] = useState({ number: "" })
   const [show, setshow] = useState(false)
   const [create, setcreate] = useState(false)
   const navigate = useNavigate()
-  // const [store, setstore] = useState("")
-  // const storage =store
+  const dispatch = useDispatch()
   const ser = () => {
     if (!data == "") {
       setshow(true)
@@ -22,7 +21,7 @@ const Keypad = () => {
       setshow(false)
     }
   }
-  // console.log(data.number);
+  
 
   const clear = () => {
     if (data && data.number) {
@@ -41,7 +40,8 @@ const Keypad = () => {
     if (data.number) {
       console.log(data.number);
       
-      setcontacts(data.number)
+      // setcontacts(data.number)
+      dispatch(setPhoneNumber(data.number))
       // addContact({ number: data.number });
       setdata({ number: "" });
       setcreate(false);

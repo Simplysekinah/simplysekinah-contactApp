@@ -85,9 +85,12 @@ hr{
   height: 80px;
   border-radius: 50%;
   border: 0;
+  color: white;
+  background-color: grey;
 }
 .call{
   color: white;
+  text-align: center;
 }
 .touchs{
   width: 65px;
@@ -95,6 +98,8 @@ hr{
   border-radius: 50%;
   border: 0;
   background-color: green;
+  text-align: center;
+  padding: 10px;
 }
 .holder-key{
   display: flex;
