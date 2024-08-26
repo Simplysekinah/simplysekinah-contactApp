@@ -62,11 +62,17 @@ const Save = () => {
       // console.log(userDoc);
       const userData = userDoc.data()
       // console.log(userData);
+      let initailId = 1
+      if (userData && userData.contact && userData.contact.length > 0) {
+        initailId = userData.contact.length + 1
+      }
       const contacts = userData.contact || []
       let newContact={
+        id: initailId,
         ...contact,
         phoneNumber:phoneNumber
       }
+      const filteredContacts = contacts.filter(contact => contact !== null && contact !== undefined);
       dispatch(addContact(newContact))
       contacts.push(newContact)
       await updateDoc(userDocRef, {
