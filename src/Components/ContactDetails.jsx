@@ -1,16 +1,20 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
-import React,{useEffect,useState} from 'react'
+import React,{useEffect,useRef,useState} from 'react'
 import { useParams,Link } from 'react-router-dom'
 // import { auth } from '../Constant/FirebaseConfig'
 import { addContact, selectContact } from '../Redux/Slice'
 import { useDispatch, useSelector } from 'react-redux'
-import { doc, getDoc } from 'firebase/firestore';
-import { auth,database } from '../Constant/FirebaseConfig';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { auth,database, storage } from '../Constant/FirebaseConfig';
 import { FaComment } from "react-icons/fa";
 import { IoIosCall } from "react-icons/io";
 import { IoVideocam } from "react-icons/io5";
 import { IoIosMail } from "react-icons/io";
 import { IoIosArrowBack } from "react-icons/io";
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import { updateContactDetails } from '../Redux/PhoneSlice'
+import { ToastContainer,toast } from 'react-toastify';
+import 'react-toastify/ReactToastify.css'
 
 const ContactDetails = () => {
     const { id } = useParams()
@@ -57,6 +61,41 @@ const ContactDetails = () => {
         )
     }
     
+    const profileupload = useRef(null)
+    const handleInput = async(event) =>{
+        const file = event.target.files[0]
+        console.log(file);
+        if (file) {
+            try {
+                const storage =getStorage()
+                const storageRef =ref( storage, `contactProfile_picture${file.name}`)
+                console.log(storageRef)
+                const snapshot = await uploadBytes(storageRef, file)
+                console.log(snapshot)
+                const photoUrl = await getDownloadURL(snapshot.ref)
+                console.log(photoUrl)
+
+                const updatedContacts = { ...userContacts, photoUrl}
+
+                const uid =auth.currentUser.uid
+                const userRef = doc(database, 'Users', uid);
+                const userDoc = await getDoc(userRef);
+                const userData = userDoc.data();
+                await updateDoc(userRef, {
+                    contact: userData.contact.map((contact)=>contact.id === updatedContacts.id ? updatedContacts : contact)
+                })
+                dispatch(updateContactDetails(updatedContacts))
+                console.log("Profile picture updated successfully!");
+                toast.success('Profile picture updated successfully!')
+            } catch (error) {
+                console.error("Error uploading and updating profile picture:", error);
+                toast.success('Error uploading and updating profile picture')
+            }
+        }
+    }
+    const profileChange = ()=>{
+        profileupload.current.click()
+    }
     return (
         <>
             <div className=' bg-black p-4'>
@@ -65,7 +104,7 @@ const ContactDetails = () => {
                     <div className='text-white'>Edit</div>
                 </div>
                 <div className=' text-center flex items-center justify-center flex-col'>
-                    <div className=' bg-slate-300 flex items-center justify-center text-center rounded-full w-[100px] h-[100px]'>
+                    <div className=' bg-slate-300 flex items-center justify-center text-center rounded-full w-[100px] h-[100px]' onClick={profileChange}>
                         {
                         userContacts.photoUrl ? (
                             <img src={userContacts.photoUrl} alt="" />
@@ -73,7 +112,11 @@ const ContactDetails = () => {
                             <div className=' text-white text-2xl font-bold text-center'>{userContacts.firstName}</div>
                         )
                         }
-                        <input type="file" className='bg-white' />
+                        <input type="file" 
+                        hidden 
+                        ref={profileupload} 
+                        onChange={handleInput}
+                        className='bg-white' />
                     </div>
                     <div className=' text-white text-xl font-medium'>{userContacts.firstName} {userContacts.lastName}</div>
                     <div className=' flex justify-between items-center gap-4 py-2'>
@@ -116,6 +159,7 @@ const ContactDetails = () => {
                 <div className=' p-2 rounded-md bg-zinc-600 my-2'>
                     <a href="" className='no-underline'>Block Caller</a>
                 </div>
+                <ToastContainer/>
             </div>
         </>
     )
