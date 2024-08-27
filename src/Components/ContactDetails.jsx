@@ -1,6 +1,6 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import React,{useEffect,useRef,useState} from 'react'
-import { useParams,Link } from 'react-router-dom'
+import { useParams,Link, useNavigate } from 'react-router-dom'
 // import { auth } from '../Constant/FirebaseConfig'
 import { addContact, selectContact } from '../Redux/Slice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -60,14 +60,16 @@ const ContactDetails = () => {
         </div>
         )
     }
-    
+    const [Isloading, setIsloading] = useState(false)
     const profileupload = useRef(null)
     const handleInput = async(event) =>{
         const file = event.target.files[0]
         console.log(file);
         if (file) {
+            setIsloading(true)
             try {
                 const storage =getStorage()
+                console.log(storage)
                 const storageRef =ref( storage, `contactProfile_picture${file.name}`)
                 console.log(storageRef)
                 const snapshot = await uploadBytes(storageRef, file)
@@ -84,30 +86,48 @@ const ContactDetails = () => {
                 await updateDoc(userRef, {
                     contact: userData.contact.map((contact)=>contact.id === updatedContacts.id ? updatedContacts : contact)
                 })
+                setuserContacts(updatedContacts)
                 dispatch(updateContactDetails(updatedContacts))
                 console.log("Profile picture updated successfully!");
                 toast.success('Profile picture updated successfully!')
             } catch (error) {
                 console.error("Error uploading and updating profile picture:", error);
                 toast.success('Error uploading and updating profile picture')
+            }finally{
+                setIsloading(false)
             }
         }
     }
+    useEffect(() => {
+        setTimeout(() => {
+            if (Isloading) {
+                toast.success('uploading profile picture,please wait....')
+            }
+        }, 1000);
+    }, [Isloading])
+    
     const profileChange = ()=>{
         profileupload.current.click()
+    }
+
+    const navigate = useNavigate()
+    const editDetails = () =>{
+        setTimeout(() => {
+            navigate(`/editDetails/${id}`)
+        }, 2000);
     }
     return (
         <>
             <div className=' bg-black p-4'>
                 <div className=' flex justify-between'>
                     <IoIosArrowBack size={25} className='text-white' />
-                    <div className='text-white'>Edit</div>
+                    <div className='text-white' onClick={editDetails}>Edit</div>
                 </div>
                 <div className=' text-center flex items-center justify-center flex-col'>
                     <div className=' bg-slate-300 flex items-center justify-center text-center rounded-full w-[100px] h-[100px]' onClick={profileChange}>
                         {
                         userContacts.photoUrl ? (
-                            <img src={userContacts.photoUrl} alt="" />
+                            <img className='rounded-full w-[100px] h-[100px]' src={userContacts.photoUrl} alt="" />
                         ) : (
                             <div className=' text-white text-2xl font-bold text-center'>{userContacts.firstName}</div>
                         )

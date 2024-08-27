@@ -10,6 +10,7 @@ import Save from './Components/Save'
 import ContactsList from './Components/ContactsList'
 import AuthSign from './Components/Authentication/AuthSign'
 import ContactDetails from './Components/ContactDetails'
+import EditDetails from './Components/EditDetails'
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path='/save' element={<Save />} />
         <Route path='/numberPage' element={<ContactsList />} />
         <Route path='/contactDetails/:id' element={<ContactDetails />} />
+        <Route path='/editDetails/:id' element={<EditDetails />} />
       </Routes>
     </>
   )
